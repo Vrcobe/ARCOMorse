@@ -59,7 +59,6 @@ extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
 extern int led;
 extern int pulsado;
-extern int contador;
 /* USER CODE END EV */
 
 /******************************************************************************/

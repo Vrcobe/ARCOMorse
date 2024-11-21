@@ -51,9 +51,6 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 volatile int led = 0;
 volatile int pulsado = 0;
-volatile int ralla = 0;
-volatile int contador = 0;
-int anterior = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -119,12 +116,12 @@ int main(void)
 	 }
 	 if(pulsado){
 		 if(TIM2->CNT>1000){
-					 sprintf(cadena,"-\n\r");
-					 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
-				 }else{
-					 sprintf(cadena,".\n\r");
-					 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
-				 }
+			 sprintf(cadena,"-\n\r");
+			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
+		 }else{
+			 sprintf(cadena,".\n\r");
+			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
+		 }
 		 pulsado=0;
 	 }
 
