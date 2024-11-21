@@ -45,7 +45,8 @@ TIM_HandleTypeDef htim2;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+volatile int led = 0;
+int anterior = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,6 +102,17 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+	  if(anterior!=led){
+
+		  if(led){
+				  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
+			  }
+		  else{
+			  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+		  }
+		  anterior = led;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -43,7 +43,6 @@
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
-
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 
@@ -57,7 +56,7 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
-
+extern int led;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -204,7 +203,12 @@ void SysTick_Handler(void)
 void EXTI4_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_IRQn 0 */
-
+	if(led==0){
+			led=1;
+		}
+	else{
+		led = 0;
+	}
   /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
