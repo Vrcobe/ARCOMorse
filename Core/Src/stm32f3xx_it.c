@@ -43,6 +43,7 @@
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
+
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN PFP */
 
@@ -57,6 +58,8 @@
 extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
 extern int led;
+extern int pulsado;
+extern int contador;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -222,7 +225,8 @@ void EXTI4_IRQHandler(void)
 void EXTI9_5_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI9_5_IRQn 0 */
-
+	TIM2->CNT=0;
+	pulsado=1;
   /* USER CODE END EXTI9_5_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_5);
   /* USER CODE BEGIN EXTI9_5_IRQn 1 */
@@ -236,7 +240,6 @@ void EXTI9_5_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
-
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */
