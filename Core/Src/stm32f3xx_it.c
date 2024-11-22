@@ -57,8 +57,9 @@
 /* External variables --------------------------------------------------------*/
 extern TIM_HandleTypeDef htim2;
 /* USER CODE BEGIN EV */
-extern int led;
+extern int retransmitiendo;
 extern int pulsado;
+extern int contador;
 /* USER CODE END EV */
 
 /******************************************************************************/
@@ -205,11 +206,11 @@ void SysTick_Handler(void)
 void EXTI4_IRQHandler(void)
 {
   /* USER CODE BEGIN EXTI4_IRQn 0 */
-	if(led==0){
-			led=1;
+	if(retransmitiendo==0){
+		retransmitiendo=1;
 		}
 	else{
-		led = 0;
+		retransmitiendo = 0;
 	}
   /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
@@ -239,6 +240,7 @@ void EXTI9_5_IRQHandler(void)
 void TIM2_IRQHandler(void)
 {
   /* USER CODE BEGIN TIM2_IRQn 0 */
+
   /* USER CODE END TIM2_IRQn 0 */
   HAL_TIM_IRQHandler(&htim2);
   /* USER CODE BEGIN TIM2_IRQn 1 */

@@ -49,7 +49,7 @@ TIM_HandleTypeDef htim15;
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-volatile int led = 0;
+volatile int retransmitiendo = 0;
 volatile int pulsado = 0;
 /* USER CODE END PV */
 
@@ -104,6 +104,7 @@ int main(void)
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
   char cadena[10];
+  int indiceCadena = 0;
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
@@ -111,23 +112,32 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	 while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)==0){
 
-	 }
-	 if(pulsado){
-		 if(TIM2->CNT>1000){
-			 sprintf(cadena,"-\n\r");
-			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
-		 }else{
-			 sprintf(cadena,".\n\r");
-			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
-		 }
-		 pulsado=0;
-	 }
-
-	 if(led){
+	 if (retransmitiendo) {
 		 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
-	 }else{
+		 while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)==0){
+
+		 }
+		 if(pulsado){
+			 if(TIM2->CNT>1000){
+				 cadena[indiceCadena] = '-';
+				 indiceCadena++;
+
+			 }else{
+				 cadena[indiceCadena] = '.';
+				 indiceCadena++;
+			 }
+			 pulsado=0;
+		 }
+
+
+	 } else {
+		 if(indiceCadena>0){
+			 cadena[indiceCadena] = ' ';
+			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
+			 strcpy(cadena,"");
+			 indiceCadena=0;
+		 }
 		 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
 	 }
 
