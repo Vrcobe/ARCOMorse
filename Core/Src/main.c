@@ -118,7 +118,7 @@ int main(void)
 
 		 }
 		 if(pulsado){
-			 if(TIM2->CNT>500){
+			 if(TIM2->CNT>200){
 				 cadena[indiceCadena] = '-';
 				 indiceCadena++;
 
