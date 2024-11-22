@@ -18,12 +18,11 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "string.h"
-#include "stdio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdio.h"
+#include "string.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -103,7 +102,7 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
-  char cadena[10];
+  char cadena[50];
   int indiceCadena = 0;
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
@@ -119,7 +118,7 @@ int main(void)
 
 		 }
 		 if(pulsado){
-			 if(TIM2->CNT>1000){
+			 if(TIM2->CNT>500){
 				 cadena[indiceCadena] = '-';
 				 indiceCadena++;
 
@@ -134,7 +133,7 @@ int main(void)
 	 } else {
 		 if(indiceCadena>0){
 			 cadena[indiceCadena] = ' ';
-			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, strlen(cadena),0);
+			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, indiceCadena+1,HAL_MAX_DELAY);
 			 strcpy(cadena,"");
 			 indiceCadena=0;
 		 }
@@ -259,7 +258,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 2000;
+  htim2.Init.Period = 4999;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
