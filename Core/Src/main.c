@@ -50,6 +50,8 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 volatile int retransmitiendo = 0;
 volatile int pulsado = 0;
+char cadena[50];        // Cadena para almacenar puntos y rayas del código Morse
+int indiceCadena = 0;   // Índice para manejar la cadena
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,7 +67,36 @@ static void MX_TIM15_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+// Función para decodificar código Morse a texto
+char MorseDecode(const char *morseCode) {
+    if (strcmp(morseCode, ".-") == 0) return 'A';
+    if (strcmp(morseCode, "-...") == 0) return 'B';
+    if (strcmp(morseCode, "-.-.") == 0) return 'C';
+    if (strcmp(morseCode, "-..") == 0) return 'D';
+    if (strcmp(morseCode, ".") == 0) return 'E';
+    if (strcmp(morseCode, "..-.") == 0) return 'F';
+    if (strcmp(morseCode, "--.") == 0) return 'G';
+    if (strcmp(morseCode, "....") == 0) return 'H';
+    if (strcmp(morseCode, "..") == 0) return 'I';
+    if (strcmp(morseCode, ".---") == 0) return 'J';
+    if (strcmp(morseCode, "-.-") == 0) return 'K';
+    if (strcmp(morseCode, ".-..") == 0) return 'L';
+    if (strcmp(morseCode, "--") == 0) return 'M';
+    if (strcmp(morseCode, "-.") == 0) return 'N';
+    if (strcmp(morseCode, "---") == 0) return 'O';
+    if (strcmp(morseCode, ".--.") == 0) return 'P';
+    if (strcmp(morseCode, "--.-") == 0) return 'Q';
+    if (strcmp(morseCode, ".-.") == 0) return 'R';
+    if (strcmp(morseCode, "...") == 0) return 'S';
+    if (strcmp(morseCode, "-") == 0) return 'T';
+    if (strcmp(morseCode, "..-") == 0) return 'U';
+    if (strcmp(morseCode, "...-") == 0) return 'V';
+    if (strcmp(morseCode, ".--") == 0) return 'W';
+    if (strcmp(morseCode, "-..-") == 0) return 'X';
+    if (strcmp(morseCode, "-.--") == 0) return 'Y';
+    if (strcmp(morseCode, "--..") == 0) return 'Z';
+    return '?'; // Si no se encuentra coincidencia
+}
 /* USER CODE END 0 */
 
 /**
@@ -74,7 +105,6 @@ static void MX_TIM15_Init(void);
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -102,8 +132,6 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
-  char cadena[50];
-  int indiceCadena = 0;
   HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
@@ -111,35 +139,31 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-	 if (retransmitiendo) {
-		 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
-		 while(HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)==0){
-
-		 }
-		 if(pulsado){
-			 if(TIM2->CNT>200){
-				 cadena[indiceCadena] = '-';
-				 indiceCadena++;
-
-			 }else{
-				 cadena[indiceCadena] = '.';
-				 indiceCadena++;
-			 }
-			 pulsado=0;
-		 }
-
-
-	 } else {
-		 if(indiceCadena>0){
-			 cadena[indiceCadena] = ' ';
-			 HAL_UART_Transmit(&huart2, (uint8_t *) cadena, indiceCadena+1,HAL_MAX_DELAY);
-			 strcpy(cadena,"");
-			 indiceCadena=0;
-		 }
-		 HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
-	 }
-
+    if (retransmitiendo) {
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 1);
+        while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == 0) {
+        }
+        if (pulsado) {
+            if (TIM2->CNT > 200) {
+                cadena[indiceCadena] = '-';
+                indiceCadena++;
+            } else {
+                cadena[indiceCadena] = '.';
+                indiceCadena++;
+            }
+            pulsado = 0;
+        }
+    } else {
+        if (indiceCadena > 0) {
+            cadena[indiceCadena] = '\0'; // Terminar la cadena
+            char decodedChar = MorseDecode(cadena); // Decodificar el carácter Morse
+            char mensaje[2] = {decodedChar, '\0'}; // Preparar para enviar
+            HAL_UART_Transmit(&huart2, (uint8_t *)mensaje, strlen(mensaje), HAL_MAX_DELAY);
+            strcpy(cadena, ""); // Reiniciar cadena
+            indiceCadena = 0;
+        }
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+    }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
