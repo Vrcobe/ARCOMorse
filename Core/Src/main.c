@@ -159,10 +159,10 @@ int main(void)
             char decodedChar = MorseDecode(cadena); // Decodificar el carácter Morse
             char mensaje[2] = {decodedChar, '\0'}; // Preparar para enviar
             HAL_UART_Transmit(&huart2, (uint8_t *)mensaje, strlen(mensaje), HAL_MAX_DELAY);
-            strcpy(cadena, ""); // Reiniciar cadena
-            indiceCadena = 0;
         }
         HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+        strcpy(cadena, ""); // Reiniciar cadena
+        indiceCadena = 0;
     }
     /* USER CODE END WHILE */
 
