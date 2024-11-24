@@ -207,9 +207,10 @@ void EXTI4_IRQHandler(void)
   /* USER CODE BEGIN EXTI4_IRQn 0 */
 	if(retransmitiendo==0){
 		retransmitiendo=1;
-		}
-	else{
+		pulsado = 0;
+	}else {
 		retransmitiendo = 0;
+		pulsado = 0;
 	}
   /* USER CODE END EXTI4_IRQn 0 */
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
