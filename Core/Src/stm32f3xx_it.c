@@ -216,7 +216,6 @@ void EXTI4_IRQHandler(void)
   HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_4);
   /* USER CODE BEGIN EXTI4_IRQn 1 */
 
-  TIM2->CNT = 0;
   /* USER CODE END EXTI4_IRQn 1 */
 }
 

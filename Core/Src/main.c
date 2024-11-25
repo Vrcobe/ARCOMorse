@@ -50,7 +50,7 @@ UART_HandleTypeDef huart2;
 /* USER CODE BEGIN PV */
 volatile int retransmitiendo = 0;
 volatile int pulsado = 0;
-char cadena[50];        // Cadena para almacenar puntos y rayas del código Morse
+char cadena[10];        // Cadena para almacenar puntos y rayas del código Morse
 int indiceCadena = 0;   // Índice para manejar la cadena
 /* USER CODE END PV */
 
@@ -133,6 +133,8 @@ int main(void)
   MX_TIM15_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
+  int anterior=1;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -153,16 +155,25 @@ int main(void)
             }
             pulsado = 0;
         }
-    } else {
-        if (indiceCadena > 0) {
-            cadena[indiceCadena] = '\0'; // Terminar la cadena
-            char decodedChar = MorseDecode(cadena); // Decodificar el carácter Morse
-            char mensaje[2] = {decodedChar, '\0'}; // Preparar para enviar
-            HAL_UART_Transmit(&huart2, (uint8_t *)mensaje, strlen(mensaje), HAL_MAX_DELAY);
-        }
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
-        strcpy(cadena, ""); // Reiniciar cadena
-        indiceCadena = 0;
+        anterior=0;
+    } else{
+
+    	if(anterior==0 ){
+			if (indiceCadena > 0) {
+				cadena[indiceCadena] = '\0'; // Terminar la cadena
+				char decodedChar = MorseDecode(cadena); // Decodificar el carácter Morse
+				char mensaje[2] = {decodedChar, '\0'}; // Preparar para enviar
+				HAL_UART_Transmit(&huart2, (uint8_t *)mensaje, strlen(mensaje), 0);
+			}else {
+				 HAL_UART_Transmit(&huart2, (uint8_t *)" ", 1, 0);
+
+			}
+			indiceCadena = 0;
+			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, 0);
+			strcpy(cadena, ""); // Reiniciar cadena
+			anterior=1;
+
+    	}
     }
     /* USER CODE END WHILE */
 
