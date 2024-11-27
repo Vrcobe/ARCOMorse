@@ -134,6 +134,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start_IT(&htim2);
   int anterior=1;
+  HAL_SYSTICK_Config(8000000/1000);
 
   /* USER CODE END 2 */
 
@@ -146,7 +147,7 @@ int main(void)
         while (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5) == 0) {
         }
         if (pulsado) {
-            if (TIM2->CNT > 200) {
+            if (TIM2->CNT >175) {
                 cadena[indiceCadena] = '-';
                 indiceCadena++;
             } else {
